@@ -24,7 +24,7 @@ const options = {
 }
 
 app.get('/', function (req, res) {
-    res.sendFile(__dirname + '/public/index.html');
+    res.sendFile(__dirname + '/dist/index.html');
     console.log("GET /")
 });
 
