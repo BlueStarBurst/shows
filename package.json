@@ -1,6 +1,7 @@
 {
     "scripts": {
-        "start": "webpack --mode development --config ./webpack.dev.config.js --watch"
+        "start": "webpack --mode development --config ./webpack.dev.config.cjs --watch",
+        "server": "node server.mjs"
     },
     "dependencies": {
         "@babel/polyfill": "^7.12.1",

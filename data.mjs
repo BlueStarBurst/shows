@@ -1,4 +1,4 @@
-const fs = require("fs");
+import fs from 'fs';
 
 export default class Data {
 
@@ -25,7 +25,7 @@ export default class Data {
             const element = this.shows[i];
             if (data.name == element.name) {
                 console.log("already created");
-                return
+                return false;
             }
         }
 
@@ -37,6 +37,7 @@ export default class Data {
 
         console.log(this.data)
         this.saveData();
+        return true;
     }
 
     getShowNames(str = "") {

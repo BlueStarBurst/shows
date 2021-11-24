@@ -25,17 +25,21 @@ export default function AddShow(props) {
 
     function checkInput() {
 
-        if (show.value.length == 0) {
+        if (input.current.value.length == 0) {
             return;
         }
 
-        httpPostAsync("/autofill", 'str=' + show.value, changeList);
+        httpPostAsync("/autofill", 'str=' + input.current.value, changeList);
+    }
+
+    function submit() {
+        httpPostAsync('/addShow', 'name=' + input.current.value)
     }
 
     return (<>
-        <input ref={input} onChange={checkInput} class="input" oninput="checkInput()" id="show" list="list" />
+        <input ref={input} onChange={checkInput} className="input" id="show" list="list" />
         <datalist id="list">
         </datalist>
-        <Button variant="primary" id="addShow">addShow</Button>
+        <Button variant="primary" id="addShow" onClick={submit}>addShow</Button>
     </>);
 }
