@@ -21,16 +21,42 @@ export default class Data {
 
     createShow(data) {
 
+        if (data.name.length == 0) {
+            return false;
+        }
+
         for (let i = 0; i < this.shows.length; i++) {
             const element = this.shows[i];
-            if (data.name == element.name) {
+            if (data.name.toLowerCase() == element.name.toLowerCase()) {
                 console.log("already created");
                 return false;
             }
         }
 
         var show = {}
-        show.name = data.name;
+        var articles = ["and ", "the ", "of ", "in ", "as ", "an ", "a "]
+
+        var newTitle = data.name.charAt(0).toUpperCase();
+
+        for (let i = 1; i < data.name.length; i++) {
+            if (data.name.charAt(i-1) == " ") {
+                var upper = true;
+                articles.forEach(article => {
+                    if (article == data.name.substr(i,article.length)) {
+                        upper = false;
+                    }
+                });
+                if (upper) {
+                    newTitle += data.name.charAt(i).toUpperCase();
+                } else {
+                    newTitle += data.name.charAt(i);
+                }
+            } else {
+                newTitle += data.name.charAt(i);
+            }
+        }
+
+        show.name = newTitle;
         this.shows.push(show);
 
         this.data[0] = this.shows;
@@ -49,7 +75,7 @@ export default class Data {
             const element = this.shows[i];
 
             var title = element.name.toLowerCase();
-            if (str.length == 0 || title.indexOf(str) == 0) {
+            if (str.length == 0 || title.indexOf(str) != -1) {
                 temp.push(element);
             }
         }
