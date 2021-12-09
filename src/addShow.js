@@ -94,8 +94,4 @@ export default function AddShow(props) {
         </>
     );
 
-    return (<>
-
-        <Button variant="primary" onClick={submit}>addShow</Button>
-    </>);
 }
