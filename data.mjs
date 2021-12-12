@@ -84,19 +84,27 @@ export default class Data {
     }
 
     saveData() {
-        var json = JSON.stringify(this.data);
-        fs.writeFileSync('data.json', json, (err) => {
+        var jsonS = JSON.stringify(this.data);
+        var jsonT = JSON.stringify(this.data);
+        fs.writeFileSync('shows.json', jsonS, (err) => {
             if (err) throw err;
-            console.log('The file has been saved!');
+            console.log('The shows has been saved!');
+        });
+        fs.writeFileSync('tickets.json', jsonT, (err) => {
+            if (err) throw err;
+            console.log('The tickets has been saved!');
         });
     }
 
     readData() {
-        fs.readFile('data.json', 'utf8', (err, data) => {
+        fs.readFile('shows.json', 'utf8', (err, data) => {
             if (data != "") {
-                this.data = JSON.parse(data);
-                this.shows = this.data[0];
-                this.tickets = this.data[1];
+                this.shows = JSON.parse(data);
+            }
+        });
+        fs.readFile('tickets.json', 'utf8', (err, data) => {
+            if (data != "") {
+                this.tickets = JSON.parse(data);
             }
         });
     }

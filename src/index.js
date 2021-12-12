@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { render } from 'react-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
@@ -12,6 +12,8 @@ function App() {
     const input = useRef(null);
 
     const [findable, setFindable] = useState(false);
+    const [currentShow, setCurrentShow] = useState('');
+    const [randomShow, setRandomShow] = useState('');
 
     function changeList(lists) {
         while (findList.firstChild) {
@@ -26,14 +28,15 @@ function App() {
         lists.forEach(element => {
             var option = document.createElement("option")
             option.value = element.name;
-            if (element.name == input.current.value) {
+            
+            if (element.name.toLowerCase() == input.current.value.toLowerCase()) {
+                setCurrentShow(element.name)
                 isDuplicate = true;
             }
             findList.append(option);
         });
 
         setFindable(isDuplicate)
-
     }
 
     function checkInput() {
@@ -48,16 +51,27 @@ function App() {
         httpPostAsync("/autofill", 'str=' + input.current.value, changeList);
     }
 
+    function getRandom() {
+        httpPostAsync("/autofill", 'str=' + '', (data) => {
+            data = JSON.parse(data)
+            setRandomShow(data[(Math.random() * data.length) | 0].name)
+        });
+    }
+
+    useEffect(() => {
+        getRandom();
+    }, [])
+
     return (
 
         <div style={{ display: "flex", alignContent: "center", justifyContent: "center", flexDirection: "column", textAlign: "center", alignItems: "center", verticalAlign: "center", height: "100vh" }}>
             <div>
                 <p>Find me a show like...</p>
                 <InputGroup className='m-auto'>
-                    <FormControl ref={input} onChange={checkInput} list="findList" />
+                    <FormControl ref={input} onChange={checkInput} list="findList" placeholder={randomShow} />
                     <datalist id="findList">
                     </datalist>
-                    <AdjustShow disabled={true} />
+                    <AdjustShow disabled={!findable} currentShow={currentShow} />
                 </InputGroup>
             </div>
             <br />
