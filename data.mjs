@@ -2,21 +2,15 @@ import fs from 'fs';
 
 export default class Data {
 
-    data = [[], []]
     shows = []
-    tickets = []
+    tickets = { 'add': {}, 'adj': {}, 'req': [], 'bug': [] }
 
     // STANDARD CATEGORIES
     // 0 = cute   1 = action   2 = romance   3 = shoujo   4 = seinen
 
 
     constructor() {
-
         this.readData();
-
-        this.shows = this.data[0];
-        this.tickets = this.data[1];
-        console.log(this.data)
     }
 
     createShow(data) {
@@ -27,6 +21,8 @@ export default class Data {
 
         for (let i = 0; i < this.shows.length; i++) {
             const element = this.shows[i];
+            console.log(data);
+            console.log(element);
             if (data.name.toLowerCase() == element.name.toLowerCase()) {
                 console.log("already created");
                 return false;
@@ -39,10 +35,10 @@ export default class Data {
         var newTitle = data.name.charAt(0).toUpperCase();
 
         for (let i = 1; i < data.name.length; i++) {
-            if (data.name.charAt(i-1) == " ") {
+            if (data.name.charAt(i - 1) == " ") {
                 var upper = true;
                 articles.forEach(article => {
-                    if (article == data.name.substr(i,article.length)) {
+                    if (article == data.name.substr(i, article.length)) {
                         upper = false;
                     }
                 });
@@ -56,13 +52,24 @@ export default class Data {
             }
         }
 
-        show.name = newTitle;
-        this.shows.push(show);
+        if (this.tickets.add[newTitle]) {
+            this.tickets.add[newTitle].count = this.tickets.add[newTitle].count + 1
+        } else {
+            this.tickets.add[newTitle] = {count: 1, data:[]};
+        }
 
-        this.data[0] = this.shows;
+        if (data.data) {
+            this.tickets.add[newTitle].data.push(data.data.split(',').map(function(item) {
+                return parseInt(item, 10);
+            }))
+        }
 
-        console.log(this.data)
-        this.saveData();
+
+        // this.shows.push(show);
+
+        // this.tickets.add.push(show);
+
+        this.saveTickets();
         return true;
     }
 
@@ -70,7 +77,6 @@ export default class Data {
         str = str.toLowerCase();
         var temp = [];
         console.log(this.shows)
-        console.log(this.data)
         for (let i = 0; i < this.shows.length; i++) {
             const element = this.shows[i];
 
@@ -83,26 +89,29 @@ export default class Data {
         return JSON.stringify(temp);
     }
 
-    saveData() {
-        var jsonS = JSON.stringify(this.data);
-        var jsonT = JSON.stringify(this.data);
-        fs.writeFileSync('shows.json', jsonS, (err) => {
+    saveShows() {
+        var jsonS = JSON.stringify(this.shows);
+        fs.writeFileSync('data/shows.json', jsonS, (err) => {
             if (err) throw err;
-            console.log('The shows has been saved!');
+            console.log('The shows have been saved!');
         });
-        fs.writeFileSync('tickets.json', jsonT, (err) => {
+    }
+
+    saveTickets() {
+        var jsonT = JSON.stringify(this.tickets);
+        fs.writeFileSync('data/tickets.json', jsonT, (err) => {
             if (err) throw err;
-            console.log('The tickets has been saved!');
+            console.log('The tickets have been saved!');
         });
     }
 
     readData() {
-        fs.readFile('shows.json', 'utf8', (err, data) => {
+        fs.readFile('data/shows.json', 'utf8', (err, data) => {
             if (data != "") {
                 this.shows = JSON.parse(data);
             }
         });
-        fs.readFile('tickets.json', 'utf8', (err, data) => {
+        fs.readFile('data/tickets.json', 'utf8', (err, data) => {
             if (data != "") {
                 this.tickets = JSON.parse(data);
             }

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { httpGetAsync, httpPostAsync } from "./serverHandler";
+import { httpGetAsync, httpPostAsync } from "./assets/serverHandler";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal'
 import { InputGroup, FormControl } from "react-bootstrap";
@@ -66,6 +66,7 @@ export default function AdjustShow(props) {
                         step={1}
                         value={data[0]}
                         onChange={changeEvent => adjustData(changeEvent, 0)}
+                        onClick={changeEvent => adjustData(changeEvent, 0)}
                     />
 
                     <p>Comedy:</p>
@@ -75,6 +76,7 @@ export default function AdjustShow(props) {
                         max={10}
                         step={1}
                         value={data[1]}
+                        onClick={changeEvent => adjustData(changeEvent, 1)}
                         onChange={changeEvent => adjustData(changeEvent, 1)}
                     />
 
@@ -85,6 +87,7 @@ export default function AdjustShow(props) {
                         max={10}
                         step={1}
                         value={data[2]}
+                        onClick={changeEvent => adjustData(changeEvent, 2)}
                         onChange={changeEvent => adjustData(changeEvent, 2)}
                     />
 
@@ -95,6 +98,7 @@ export default function AdjustShow(props) {
                         max={10}
                         step={1}
                         value={data[3]}
+                        onClick={changeEvent => adjustData(changeEvent, 3)}
                         onChange={changeEvent => adjustData(changeEvent, 3)}
                     />
 

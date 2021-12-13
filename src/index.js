@@ -3,16 +3,21 @@ import { render } from 'react-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
 
+import './assets/styles.css'
+
 import AddShow from './addShow';
 import { Button, Container, FormControl, InputGroup } from 'react-bootstrap';
-import { httpGetAsync, httpPostAsync } from "./serverHandler";
+import { httpGetAsync, httpPostAsync } from "./assets/serverHandler";
 import AdjustShow from './adjustShow';
+import CreateTicket from './createTicket';
 
 function App() {
     const input = useRef(null);
+    const ticket = useRef(null);
 
     const [findable, setFindable] = useState(false);
     const [currentShow, setCurrentShow] = useState('');
+    const [currentIn, setCurrentIn] = useState('');
     const [randomShow, setRandomShow] = useState('');
 
     function changeList(lists) {
@@ -28,7 +33,7 @@ function App() {
         lists.forEach(element => {
             var option = document.createElement("option")
             option.value = element.name;
-            
+
             if (element.name.toLowerCase() == input.current.value.toLowerCase()) {
                 setCurrentShow(element.name)
                 isDuplicate = true;
@@ -37,11 +42,20 @@ function App() {
         });
 
         setFindable(isDuplicate)
+
+        if (isDuplicate) {
+            ticket.current.className = "hide";
+        } else {
+            ticket.current.className = "show";
+        }
     }
 
     function checkInput() {
 
+        setCurrentIn(input.current.value)
+
         if (input.current.value.length == 0) {
+            // ticket.current.className = "hide";
             while (findList.firstChild) {
                 findList.removeChild(findList.firstChild);
             }
@@ -67,7 +81,7 @@ function App() {
         <div style={{ display: "flex", alignContent: "center", justifyContent: "center", flexDirection: "column", textAlign: "center", alignItems: "center", verticalAlign: "center", height: "100vh" }}>
             <div>
                 <p>Find me a show like...</p>
-                <InputGroup className='m-auto'>
+                <InputGroup className='m-auto' style={{ zIndex: "100" }}>
                     <FormControl ref={input} onChange={checkInput} list="findList" placeholder={randomShow} />
                     <datalist id="findList">
                     </datalist>
@@ -75,16 +89,20 @@ function App() {
                 </InputGroup>
             </div>
             <br />
-            {/* <div>
-                <p>Can't find what you're looking for?</p>
-                
-            </div> */}
+            <div className='hide' ref={ticket} >
+                <p>Can't find what you're looking for? <CreateTicket tempShow={currentIn} /></p>
+            </div>
         </div>
+
+
 
 
     )
 }
 
-console.log("hi")
+
+function getAdmin() {
+    httpPostAsync("/autofill", 'str=' + input.current.value, changeList);
+}
 
 render(<App />, document.getElementById("root"));
