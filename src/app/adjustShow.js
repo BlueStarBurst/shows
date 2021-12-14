@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { httpGetAsync, httpPostAsync } from "./assets/serverHandler";
+import { httpGetAsync, httpPostAsync } from "../assets/serverHandler";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal'
 import { InputGroup, FormControl } from "react-bootstrap";
@@ -19,7 +19,7 @@ export default function AdjustShow(props) {
     const [toggle, setToggle] = useState(false);
 
     useEffect(() => {
-        console.log(props.disabled)
+        // console.log(props.disabled)
     }, [props])
 
     const handleClose = () => {

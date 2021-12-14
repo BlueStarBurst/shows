@@ -1,4 +1,4 @@
-export function httpPostAsync(theUrl, data, callback = console.log) {
+export function httpPostAsync(theUrl, data, callback = console.log, error = console.log) {
     var xmlHttp = new XMLHttpRequest();
 
     xmlHttp.open("POST", theUrl, true); // true for asynchronous 
@@ -7,6 +7,9 @@ export function httpPostAsync(theUrl, data, callback = console.log) {
     xmlHttp.onreadystatechange = function () {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
             callback(xmlHttp.responseText);
+        else {
+            error(xmlHttp.status)
+        }
     }
 
     xmlHttp.send(data);

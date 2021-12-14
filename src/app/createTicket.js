@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { httpGetAsync, httpPostAsync } from "./assets/serverHandler";
+import { httpGetAsync, httpPostAsync } from "../assets/serverHandler";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal'
 import { InputGroup, FormControl, FormLabel, FormSelect } from "react-bootstrap";
