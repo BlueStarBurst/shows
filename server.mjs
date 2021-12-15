@@ -5,6 +5,11 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import bcrypt from 'bcrypt'
 import { readFileSync, readFile } from 'fs';
+import https from 'https';
+var privateKey  = readFileSync('secure/key.pem', 'utf8');
+var certificate = readFileSync('secure/cert.pem', 'utf8');
+
+var credentials = {key: privateKey, cert: certificate, passphrase: 'blue'};
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -36,7 +41,8 @@ app.get('/', function (req, res) {
 });
 
 app.get('/admin', function (req, res) {
-    res.sendFile(__dirname + '/dist/index.html');
+    console.log(req.headers);
+    res.sendFile(__dirname + '/dist/admin.html');
     console.log("GET /admin")
 });
 
@@ -44,7 +50,7 @@ app.post('/login', function (req, res) {
     // res.sendFile(__dirname + '/dist/index.html');
     console.log(req.body.pass)
     bcrypt.compare(req.body.pass, users.hash, function (err, result) {
-        if (result) {
+        if (result && req.body.user == users.user) {
             res.sendStatus(200);
         } else {
             res.sendStatus(400);
@@ -74,9 +80,11 @@ app.post('/addShow', function (req, res) {
 });
 
 app.use(express.static('dist', options))
-app.listen(5000)
 
-console.log('listening on port 5000');
+var httpsServer = https.createServer(credentials, app);
+httpsServer.listen(443)
+
+console.log('listening on port 443');
 
 console.log(bcrypt.hashSync("4uBRxb5Y66DFPb5", bcrypt.genSaltSync()))
 

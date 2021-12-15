@@ -37,12 +37,12 @@ a {
 
 .showAdminImg {
   transform: translateY(0);
-  transition: all 2s;
+  transition: all 1s;
 }
 
 .hideAdminImg {
   transform: translateY(100%);
-  transition: all 2s;
+  transition: all 1s;
 }
 
 /* @keyframes onShow {

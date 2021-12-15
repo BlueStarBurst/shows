@@ -11,7 +11,7 @@ import { httpGetAsync, httpPostAsync } from "../assets/serverHandler";
 import AdjustShow from './adjustShow';
 import CreateTicket from './createTicket';
 
-import adminImageSrc from '../assets/img/corgi.jpg'
+import adminImageSrc from '../assets/img/corgi.png'
 
 function App() {
     const input = useRef(null);
@@ -101,6 +101,7 @@ function App() {
     }
 
     function handleReport(data) {
+        window.location.href = "https://localhost/admin"
         console.log(data)
     }
 
