@@ -3,7 +3,7 @@ export function httpPostAsync(theUrl, data, callback = console.log, error = cons
 
     xmlHttp.open("POST", theUrl, true); // true for asynchronous 
     xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    xmlHttp.setRequestHeader('Authorization','Basic ' + "stuff");
+    xmlHttp.setRequestHeader('Authorization',"stuff");
 
     xmlHttp.onreadystatechange = function () {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
@@ -22,6 +22,7 @@ export function httpGetAsync(theUrl, data, callback = console.log) {
     var xmlHttp = new XMLHttpRequest();
 
     xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+    xmlHttp.setRequestHeader('Authorization','stuff');
     xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
     xmlHttp.onreadystatechange = function () {

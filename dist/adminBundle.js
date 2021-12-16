@@ -15,7 +15,7 @@
   \****************************/
 /***/ (() => {
 
-eval("\n\n//# sourceURL=webpack:///./src/admin/admin.js?");
+eval("console.log(location.origin); // window.location.href = location.origin + \"/\"\n\n//# sourceURL=webpack:///./src/admin/admin.js?");
 
 /***/ })
 

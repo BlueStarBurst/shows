@@ -41,8 +41,10 @@ app.get('/', function (req, res) {
 });
 
 app.get('/admin', function (req, res) {
-    console.log(req.headers);
-    res.sendFile(__dirname + '/dist/admin.html');
+    console.log(req.get('Authorization'));
+    console.log(req.headers.Authorization);
+    // res.sendFile(__dirname + '/dist/admin.html');
+    res.sendFile(__dirname + '/dist/adminBundle.js');
     console.log("GET /admin")
 });
 
@@ -81,12 +83,11 @@ app.post('/addShow', function (req, res) {
 
 app.use(express.static('dist', options))
 
-var httpsServer = https.createServer(credentials, app);
-httpsServer.listen(443)
+// var httpsServer = https.createServer(credentials, app);
+// httpsServer.listen(443)
+// console.log('listening on port 443');
 
-console.log('listening on port 443');
+app.listen(5000);
+console.log('listening on port 5000');
 
 console.log(bcrypt.hashSync("4uBRxb5Y66DFPb5", bcrypt.genSaltSync()))
-
-
-

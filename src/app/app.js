@@ -101,7 +101,8 @@ function App() {
     }
 
     function handleReport(data) {
-        window.location.href = "https://localhost/admin"
+        // window.location.href = "https://localhost/admin"
+        httpGetAsync("/admin",'',console.log)
         console.log(data)
     }
 
