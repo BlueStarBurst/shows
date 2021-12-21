@@ -115,7 +115,7 @@ function App() {
         e.preventDefault();
         // console.log(adminInputP.current.value)
         localStorage.setItem("data", JSON.stringify([adminInputU.current.value, adminInputP.current.value]))
-        httpPostAsync("/login", 'user=' + adminInputU.current.value + '&pass=' + adminInputP.current.value, handleReport, handleError);
+        httpPostAsync("/login", 'user=' + adminInputU.current.value + '&pass=' + adminInputP.current.value + '&time=100', handleReport, handleError);
     }
 
     const styles = {

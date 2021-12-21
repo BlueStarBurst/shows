@@ -6,6 +6,9 @@ import { dirname } from 'path';
 import bcrypt from 'bcrypt'
 import { readFileSync, readFile } from 'fs';
 import https from 'https';
+
+import { v4 as uuidv4 } from 'uuid';
+
 var privateKey  = readFileSync('secure/key.pem', 'utf8');
 var certificate = readFileSync('secure/cert.pem', 'utf8');
 
@@ -17,6 +20,8 @@ const __dirname = dirname(__filename);
 const app = express()
 app.use(bodyParser.urlencoded({ extended: true }));
 const data = new Data();
+
+var uuids = {}
 
 var users = {}
 readFile('./secure/users.json', 'utf8', (err, data) => {
@@ -50,10 +55,18 @@ app.get('/admin', function (req, res) {
 
 app.post('/login', function (req, res) {
     // res.sendFile(__dirname + '/dist/index.html');
-    console.log(req.body.pass)
+    var genuuid = uuidv4();
+    uuids[genuuid] = req.body.time;
+    console.log(genuuid);
+
+    setTimeout(() => {
+        delete uuids[genuuid];
+    },req.body.time);
+    
     bcrypt.compare(req.body.pass, users.hash, function (err, result) {
         if (result && req.body.user == users.user) {
-            res.sendStatus(200);
+            res.send(genuuid)
+            // res.sendStatus(200);
         } else {
             res.sendStatus(400);
         }
