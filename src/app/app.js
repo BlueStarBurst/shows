@@ -102,7 +102,7 @@ function App() {
 
     function handleReport(data) {
         // window.location.href = "https://localhost/admin"
-        httpGetAsync("/admin",'',console.log)
+        httpGetAsync("/admin", '', console.log)
         console.log(data)
     }
 
@@ -118,9 +118,24 @@ function App() {
         httpPostAsync("/login", 'user=' + adminInputU.current.value + '&pass=' + adminInputP.current.value, handleReport, handleError);
     }
 
-    return (
+    const styles = {
+        display: "flex",
+        alignContent: "center",
+        justifyContent: "center",
+        flexDirection: "column",
+        textAlign: "center",
+        alignItems: "center",
+        verticalAlign: "center",
+        height: "100vh"
+    }
 
-        <div style={{ display: "flex", alignContent: "center", justifyContent: "center", flexDirection: "column", textAlign: "center", alignItems: "center", verticalAlign: "center", height: "100vh" }}>
+    return (
+        <div style={styles}>
+
+            <h2>hi</h2>
+
+
+            {/*
             <div>
                 <p>Find me a show like...</p>
                 <InputGroup className='m-auto' style={{ zIndex: "100" }}>
@@ -169,9 +184,8 @@ function App() {
 
                 </Image>
             </div>
+            */}
         </div>
-
-
     )
 }
 

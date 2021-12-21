@@ -117,6 +117,7 @@ export default function CreateTicket(props) {
         } else {
             httpPostAsync('/addShow', 'name=' + currentShow)
         }
+        handleClose();
     }
 
     return (
