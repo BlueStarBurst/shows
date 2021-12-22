@@ -6,6 +6,7 @@ import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
 import '../assets/styles.css'
 
 import AddShow from './addShow';
+import Admin from './admin';
 import { Button, Container, Form, FormControl, FormLabel, Image, InputGroup, Modal } from 'react-bootstrap';
 import { httpGetAsync, httpPostAsync } from "../assets/serverHandler";
 import AdjustShow from './adjustShow';
@@ -132,10 +133,8 @@ function App() {
     return (
         <div style={styles}>
 
-            <h2>hi</h2>
+            <Admin />
 
-
-            {/*
             <div>
                 <p>Find me a show like...</p>
                 <InputGroup className='m-auto' style={{ zIndex: "100" }}>
@@ -184,7 +183,7 @@ function App() {
 
                 </Image>
             </div>
-            */}
+           
         </div>
     )
 }
