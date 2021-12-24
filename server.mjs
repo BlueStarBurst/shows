@@ -7,12 +7,13 @@ import bcrypt from 'bcrypt'
 import { readFileSync, readFile } from 'fs';
 import https from 'https';
 
-import { v4 as uuidv4 } from 'uuid';
+import pkg from 'uuid';
+const { v4: uuidv4 } = pkg;
 
-var privateKey  = readFileSync('secure/key.pem', 'utf8');
+var privateKey = readFileSync('secure/key.pem', 'utf8');
 var certificate = readFileSync('secure/cert.pem', 'utf8');
 
-var credentials = {key: privateKey, cert: certificate, passphrase: 'blue'};
+var credentials = { key: privateKey, cert: certificate, passphrase: 'blue' };
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -45,28 +46,41 @@ app.get('/', function (req, res) {
     console.log("GET /")
 });
 
-app.get('/admin', function (req, res) {
-    console.log(req.get('Authorization'));
-    console.log(req.headers.Authorization);
-    // res.sendFile(__dirname + '/dist/admin.html');
-    res.sendFile(__dirname + '/dist/adminBundle.js');
-    console.log("GET /admin")
+app.post('/auth', function (req, res) {
+    // console.log(req.headers.authorization)
+    if (uuids[req.headers.authorization]) {
+        res.sendStatus(200)
+    } else {
+        res.sendStatus(401)
+    }
+    console.log("POST /auth")
+});
+
+app.post('/ticketShowRequests', function (req, res) {
+    if (!uuids[req.headers.authorization]) {
+        res.sendStatus(401)
+    }
+
+    let showRequests = data.getShowRequests();
+    res.send(showRequests);
 });
 
 app.post('/login', function (req, res) {
     // res.sendFile(__dirname + '/dist/index.html');
     var genuuid = uuidv4();
-    uuids[genuuid] = req.body.time;
+    uuids[genuuid] = res;
     console.log(genuuid);
+    console.log(uuids);
 
     setTimeout(() => {
+        console.log("session " + genuuid + " has expired!")
         delete uuids[genuuid];
-    },req.body.time);
-    
+        console.log(uuids)
+    }, req.body.time);
+
     bcrypt.compare(req.body.pass, users.hash, function (err, result) {
         if (result && req.body.user == users.user) {
             res.send(genuuid)
-            // res.sendStatus(200);
         } else {
             res.sendStatus(400);
         }
@@ -76,7 +90,7 @@ app.post('/login', function (req, res) {
 });
 
 app.post('/autofill', function (req, res) {
-    console.log('Got body:', req.body);
+    // console.log('Got body:', req.body);
     var name = "";
     if (req.body.str) {
         name = req.body.str;
@@ -85,7 +99,7 @@ app.post('/autofill', function (req, res) {
 });
 
 app.post('/addShow', function (req, res) {
-    console.log('Got body:', req.body);
+    // console.log('Got body:', req.body);
     let save = data.createShow(req.body);
     if (save) {
         res.sendStatus(200);
@@ -103,4 +117,4 @@ app.use(express.static('dist', options))
 app.listen(5000);
 console.log('listening on port 5000');
 
-console.log(bcrypt.hashSync("4uBRxb5Y66DFPb5", bcrypt.genSaltSync()))
+// console.log(bcrypt.hashSync("4uBRxb5Y66DFPb5", bcrypt.genSaltSync()))

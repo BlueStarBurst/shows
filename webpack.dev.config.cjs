@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = [
     {
-        entry: './src/app/app.js',
+        entry: './src/app.js',
         output: {
             path: path.resolve(__dirname, 'dist'),
             filename: 'appBundle.js',
@@ -36,7 +36,7 @@ module.exports = [
         ]
     }, 
     {
-        entry: './src/admin/admin.js',
+        entry: './src/admin.js',
         output: {
             path: path.resolve(__dirname, 'dist'),
             filename: 'adminBundle.js',
@@ -69,7 +69,7 @@ module.exports = [
         ]
     }, 
     {
-        entry: './src/error/error.js',
+        entry: './src/error.js',
         output: {
             path: path.resolve(__dirname, 'dist'),
             filename: 'errorBundle.js',
@@ -102,7 +102,7 @@ module.exports = [
         ]
     },
     {
-        entry: './src/redirect/redirect.js',
+        entry: './src/redirect.js',
         output: {
             path: path.resolve(__dirname, 'dist'),
             filename: 'redirectBundle.js',

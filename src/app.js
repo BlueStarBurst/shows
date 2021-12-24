@@ -3,16 +3,16 @@ import { render } from 'react-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
 
-import '../assets/styles.css'
+import './assets/styles.css'
 
-import AddShow from './addShow';
-import Admin from './admin';
-import { Button, Container, Form, FormControl, FormLabel, Image, InputGroup, Modal } from 'react-bootstrap';
-import { httpGetAsync, httpPostAsync } from "../assets/serverHandler";
-import AdjustShow from './adjustShow';
-import CreateTicket from './createTicket';
+import AddShow from './elements/addShow';
+import { Button, Container, Form, FormControl, FormLabel, Image, InputGroup, Modal, Row } from 'react-bootstrap';
+import { httpGetAsync, httpPostAsync } from "./assets/serverHandler";
+import AdjustShow from './elements/adjustShow';
+import CreateTicket from './elements/createTicket';
 
-import adminImageSrc from '../assets/img/corgi.png'
+import adminImageSrc from './assets/img/corgi.png'
+import SearchShows from './elements/searchShows';
 
 function App() {
     const input = useRef(null);
@@ -102,9 +102,11 @@ function App() {
     }
 
     function handleReport(data) {
-        // window.location.href = "https://localhost/admin"
-        httpGetAsync("/admin", '', console.log)
+        
+        // httpGetAsync("/admin", '', console.log)
+        localStorage.setItem("session", data)
         console.log(data)
+        window.location.href = window.location.origin + "/admin"
     }
 
     function handleError(error) {
@@ -114,9 +116,9 @@ function App() {
 
     function getAdmin(e) {
         e.preventDefault();
-        // console.log(adminInputP.current.value)
-        localStorage.setItem("data", JSON.stringify([adminInputU.current.value, adminInputP.current.value]))
-        httpPostAsync("/login", 'user=' + adminInputU.current.value + '&pass=' + adminInputP.current.value + '&time=100', handleReport, handleError);
+        var time = (document.getElementById("remember").checked) ? 60 : 1;
+        time = time * 60000;
+        httpPostAsync("/login", 'user=' + adminInputU.current.value + '&pass=' + adminInputP.current.value + '&time=' + time, handleReport, handleError);
     }
 
     const styles = {
@@ -127,44 +129,66 @@ function App() {
         textAlign: "center",
         alignItems: "center",
         verticalAlign: "center",
-        height: "100vh"
+        height: "100vh",
+        width: "100vw"
+    }
+
+    const styleRow = {
+        display: "flex-inline",
+        alignContent: "center",
+        justifyContent: "space-between",
+        flexDirection: "row",
+        textAlign: "center",
+        alignItems: "center",
+        verticalAlign: "center",
+        width: "100%"
+    }
+
+    const item = {
+        width: "max-content"
     }
 
     return (
         <div style={styles}>
 
-            <Admin />
+            <Row style={styleRow}>
+                <div style={item}>
 
-            <div>
-                <p>Find me a show like...</p>
-                <InputGroup className='m-auto' style={{ zIndex: "100" }}>
-                    <FormControl ref={input} onChange={checkInput} list="findList" placeholder={randomShow} />
-                    <datalist id="findList">
-                    </datalist>
-                    <AdjustShow disabled={!findable} currentShow={currentShow} />
-                </InputGroup>
-            </div>
-            <br />
-            <div className='hide' ref={ticket} >
-                <p>Can't find what you're looking for? <CreateTicket tempShow={currentIn} /></p>
-            </div>
+                </div>
+                <div style={item}>
+                    <SearchShows />
+                </div>
+                <div style={item}>
+
+                </div>
+            </Row>
+
+
+
             <Modal show={showAdminModal} centered onHide={handleClose}>
                 <Form onSubmit={getAdmin}>
                     <Modal.Header closeButton>
                         Admin Login
                     </Modal.Header>
                     <Modal.Body>
+                        <Form.Group className="mb-3" controlId="formBasicUser">
+                            <InputGroup>
+                                <InputGroup.Text id="basic-addon1">User</InputGroup.Text>
+                                <FormControl placeholder='Username' autoComplete='username' ref={adminInputU} />
+                            </InputGroup>
+                        </Form.Group>
 
-                        <InputGroup>
-                            <InputGroup.Text id="basic-addon1">User</InputGroup.Text>
-                            <FormControl placeholder='Username' autoComplete='username' ref={adminInputU} />
-                        </InputGroup>
-                        <br />
-                        <InputGroup>
-                            <InputGroup.Text id="basic-addon1">Pass</InputGroup.Text>
-                            <FormControl placeholder='Password' type='password' autoComplete='password' ref={adminInputP} />
-                        </InputGroup>
+                        <Form.Group className="mb-3" controlId="formBasicPass">
+                            <InputGroup>
+                                <InputGroup.Text id="basic-addon1">Pass</InputGroup.Text>
+                                <FormControl placeholder='Password' type='password' autoComplete='password' ref={adminInputP} />
+                            </InputGroup>
+                        </Form.Group>
 
+
+                        <Form.Group className="mb-3" controlId="formBasicCheckbox">
+                            <Form.Check id="remember" type="checkbox" label="Remember me!" />
+                        </Form.Group>
 
                     </Modal.Body>
                     <Modal.Footer>
@@ -177,13 +201,12 @@ function App() {
                     </Modal.Footer>
                 </Form>
             </Modal>
-
             <div className='admin' onMouseEnter={adminMouseEnter} onMouseLeave={adminMouseLeave} onClick={handleShow}>
                 <Image ref={adminImg} className='hideAdminImg' src={adminImageSrc}>
 
                 </Image>
             </div>
-           
+
         </div>
     )
 }

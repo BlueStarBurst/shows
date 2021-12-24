@@ -9,13 +9,13 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/redirect/redirect.js":
-/*!**********************************!*\
-  !*** ./src/redirect/redirect.js ***!
-  \**********************************/
+/***/ "./src/redirect.js":
+/*!*************************!*\
+  !*** ./src/redirect.js ***!
+  \*************************/
 /***/ (() => {
 
-eval("\n\n//# sourceURL=webpack:///./src/redirect/redirect.js?");
+eval("\n\n//# sourceURL=webpack:///./src/redirect.js?");
 
 /***/ })
 
@@ -26,7 +26,7 @@ eval("\n\n//# sourceURL=webpack:///./src/redirect/redirect.js?");
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module can't be inlined because the eval devtool is used.
 /******/ 	var __webpack_exports__ = {};
-/******/ 	__webpack_modules__["./src/redirect/redirect.js"]();
+/******/ 	__webpack_modules__["./src/redirect.js"]();
 /******/ 	
 /******/ })()
 ;

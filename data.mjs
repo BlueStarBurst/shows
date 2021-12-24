@@ -89,6 +89,10 @@ export default class Data {
         return JSON.stringify(temp);
     }
 
+    getShowRequests() {
+        return this.tickets.add;
+    }
+
     saveShows() {
         var jsonS = JSON.stringify(this.shows);
         fs.writeFileSync('data/shows.json', jsonS, (err) => {
