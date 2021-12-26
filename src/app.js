@@ -5,7 +5,7 @@ import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
 
 import './assets/styles.css'
 
-import AddShow from './elements/addShow';
+// import AddShow from './elements/addShow';
 import { Button, Container, Form, FormControl, FormLabel, Image, InputGroup, Modal, Row } from 'react-bootstrap';
 import { httpGetAsync, httpPostAsync } from "./assets/serverHandler";
 import AdjustShow from './elements/adjustShow';
@@ -25,6 +25,7 @@ function App() {
     const [showAdminModal, setShowAdminModal] = useState(false);
     const [currentShow, setCurrentShow] = useState('');
     const [currentIn, setCurrentIn] = useState('');
+    const [showExpiredModal, setShowExpiredModal] = useState(localStorage.getItem("session") == "expired");
     const [randomShow, setRandomShow] = useState('');
 
     function changeList(lists) {
@@ -83,6 +84,11 @@ function App() {
         setShowAdminModal(false);
     }
 
+    function handleCloseExpired(e) {
+        localStorage.setItem("session", null)
+        setShowExpiredModal(false);
+    }
+
     function handleShow(e) {
         setShowAdminModal(true);
     }
@@ -102,11 +108,17 @@ function App() {
     }
 
     function handleReport(data) {
-        
+
         // httpGetAsync("/admin", '', console.log)
+        setShowAdminModal(false);
         localStorage.setItem("session", data)
         console.log(data)
-        window.location.href = window.location.origin + "/admin"
+        document.getElementsByClassName("midItem")[0].className = "midItemOut"
+
+        setTimeout(() => {
+            window.location.href = window.location.origin + "/admin"
+        },2000)
+        
     }
 
     function handleError(error) {
@@ -155,7 +167,7 @@ function App() {
                 <div style={item}>
 
                 </div>
-                <div style={item}>
+                <div style={item} className='midItem'>
                     <SearchShows />
                 </div>
                 <div style={item}>
@@ -206,6 +218,21 @@ function App() {
 
                 </Image>
             </div>
+
+            <Modal centered show={showExpiredModal} onHide={handleCloseExpired} >
+                <Modal.Header closeButton>
+                    Notice
+                </Modal.Header>
+                <Modal.Body>
+                    Your session has expired!
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button type="submit" variant='primary' onClick={handleCloseExpired} >
+                        Cool
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
 
         </div>
     )

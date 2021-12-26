@@ -113,9 +113,9 @@ export default function CreateTicket(props) {
 
     function finish(e, feed = false) {
         if (feed && !isFakeFeedback) {
-            httpPostAsync('/addShow', 'name=' + currentShow + '&data=' + data)
+            httpPostAsync('/createShowRequest', 'name=' + currentShow + '&data=' + data)
         } else {
-            httpPostAsync('/addShow', 'name=' + currentShow)
+            httpPostAsync('/createShowRequest', 'name=' + currentShow)
         }
         handleClose();
     }
@@ -241,9 +241,13 @@ export default function CreateTicket(props) {
                     {(!isFakeFeedback) ? <Button variant="primary" id="addShow" onClick={e => finish(e, true)} >
                         Submit
                     </Button> : null}
-
                 </Modal.Footer>
+
+                
+
             </Modal>
+
+            
         </>
     )
 }

@@ -13,7 +13,7 @@ export default class Data {
         this.readData();
     }
 
-    createShow(data) {
+    createShowTicket(data) {
 
         if (data.name.length == 0) {
             return false;

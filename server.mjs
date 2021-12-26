@@ -59,10 +59,13 @@ app.post('/auth', function (req, res) {
 app.post('/ticketShowRequests', function (req, res) {
     if (!uuids[req.headers.authorization]) {
         res.sendStatus(401)
-    }
+        return;
+    } 
 
     let showRequests = data.getShowRequests();
     res.send(showRequests);
+
+    console.log("POST /ticketShowRequests")
 });
 
 app.post('/login', function (req, res) {
@@ -70,12 +73,12 @@ app.post('/login', function (req, res) {
     var genuuid = uuidv4();
     uuids[genuuid] = res;
     console.log(genuuid);
-    console.log(uuids);
+    console.log(Object.keys(uuids));
 
     setTimeout(() => {
         console.log("session " + genuuid + " has expired!")
         delete uuids[genuuid];
-        console.log(uuids)
+        console.log(Object.keys(uuids))
     }, req.body.time);
 
     bcrypt.compare(req.body.pass, users.hash, function (err, result) {
@@ -98,9 +101,9 @@ app.post('/autofill', function (req, res) {
     res.send(data.getShowNames(name));
 });
 
-app.post('/addShow', function (req, res) {
+app.post('/createShowRequest', function (req, res) {
     // console.log('Got body:', req.body);
-    let save = data.createShow(req.body);
+    let save = data.createShowTicket(req.body);
     if (save) {
         res.sendStatus(200);
     } else {
