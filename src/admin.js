@@ -9,6 +9,7 @@ import SearchShows from './elements/searchShows';
 
 import { httpPostAsync } from './assets/serverHandler';
 import { Badge, Container, Row } from "react-bootstrap";
+import ApproveShow from './elements/approveShow';
 
 function unAuth(data) {
     localStorage.setItem("session", "expired");
@@ -54,6 +55,8 @@ export default function Admin(props) {
     }
 
     const [requests, setReq] = useState(null);
+    const [selectedReqShow, setSelectedReqShow] = useState(null);
+    const [reqShowModal, setReqShowModal] = useState(null);
 
     const styles = {
         display: "flex",
@@ -117,8 +120,9 @@ export default function Admin(props) {
         arr.sort((a, b) => b.count - a.count)
         console.log(arr)
 
+        // setReqShows(arr);
         setReq(arr.map(e =>
-            <div style={elem} className='reqShow'>
+            <div style={elem} className='reqShow' onClick={() => {setSelectedReqShow(e); setReqShowModal(true)}}>
                 <Badge pill bg="secondary" style={{ marginRight: "2%" }}>{e.count}</Badge>
                 <p className='m-0'>{e.name}</p>
             </div>
@@ -152,7 +156,7 @@ export default function Admin(props) {
                 </div>
 
             </Row>
-
+            <ApproveShow show={reqShowModal} selected={selectedReqShow} close={() => {setReqShowModal(false)}} />
         </div>
     )
 }
