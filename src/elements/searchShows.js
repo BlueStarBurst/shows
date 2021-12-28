@@ -25,22 +25,34 @@ export default function SearchShows(props) {
     const [currentIn, setCurrentIn] = useState('');
     const [randomShow, setRandomShow] = useState('');
 
-    function changeList(lists) {
+    function changeList(data) {
+        var data = JSON.parse(data)
         while (findList.firstChild) {
             findList.removeChild(findList.firstChild);
         }
         if (input.current.value.length == 0) {
+            props.setSrc(null);
+            setFindable(false);
             return;
         }
 
         var isDuplicate = false;
-        lists = JSON.parse(lists);
+
+        var lists = data[0];
+
+        if (!lists) {
+            props.setSrc(null);
+            setFindable(false);
+            return;
+        }
+
+        props.setSrc(data[1]);
         lists.forEach(element => {
             var option = document.createElement("option")
-            option.value = element.name;
+            option.value = element;
 
-            if (element.name.toLowerCase() == input.current.value.toLowerCase()) {
-                setCurrentShow(element.name)
+            if (element.toLowerCase() == input.current.value.toLowerCase()) {
+                setCurrentShow(element)
                 isDuplicate = true;
             }
             findList.append(option);
@@ -64,6 +76,8 @@ export default function SearchShows(props) {
             while (findList.firstChild) {
                 findList.removeChild(findList.firstChild);
             }
+            props.setSrc(null);
+            setFindable(false);
             return;
         }
 
@@ -72,10 +86,15 @@ export default function SearchShows(props) {
 
     function getRandom() {
         httpPostAsync("/autofill", 'str=' + '', (data) => {
-            data = JSON.parse(data)
-            setRandomShow(data[(Math.random() * data.length) | 0].name)
+            data = JSON.parse(data)[0]
+            console.log(data)
+            setRandomShow(data[(Math.random() * data.length) | 0])
         });
     }
+
+    useEffect(() => {
+        console.log(randomShow)
+    }, [randomShow])
 
     function handleClose(e) {
         setShowAdminModal(false);

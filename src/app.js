@@ -13,6 +13,7 @@ import CreateTicket from './elements/createTicket';
 
 import adminImageSrc from './assets/img/corgi.png'
 import SearchShows from './elements/searchShows';
+import ImagePreview from './elements/imagePreview';
 
 function App() {
     const input = useRef(null);
@@ -27,8 +28,11 @@ function App() {
     const [currentIn, setCurrentIn] = useState('');
     const [showExpiredModal, setShowExpiredModal] = useState(localStorage.getItem("session") == "expired");
     const [randomShow, setRandomShow] = useState('');
+    const [selectedImageSrc, setSelectedImageSrc] = useState(null);
 
-    function changeList(lists) {
+    function changeList(data) {
+        data = JSON.parse(data);
+
         while (findList.firstChild) {
             findList.removeChild(findList.firstChild);
         }
@@ -37,7 +41,13 @@ function App() {
         }
 
         var isDuplicate = false;
-        lists = JSON.parse(lists);
+        var lists = data[0];
+
+        if (lists.length == 0) {
+            setFindable(false);
+            return;
+        }
+
         lists.forEach(element => {
             var option = document.createElement("option")
             option.value = element.name;
@@ -117,8 +127,8 @@ function App() {
 
         setTimeout(() => {
             window.location.href = window.location.origin + "/admin"
-        },2000)
-        
+        }, 2000)
+
     }
 
     function handleError(error) {
@@ -165,10 +175,10 @@ function App() {
 
             <Row style={styleRow}>
                 <div style={item}>
-
+                    <ImagePreview src={selectedImageSrc} />
                 </div>
                 <div style={item} className='midItem'>
-                    <SearchShows />
+                    <SearchShows setSrc={setSelectedImageSrc} />
                 </div>
                 <div style={item}>
 
@@ -177,7 +187,7 @@ function App() {
 
 
 
-            <Modal show={showAdminModal} centered onHide={handleClose}>
+            <Modal show={showAdminModal} size='sm' centered onHide={handleClose}>
                 <Form onSubmit={getAdmin}>
                     <Modal.Header closeButton>
                         Admin Login

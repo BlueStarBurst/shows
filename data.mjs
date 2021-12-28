@@ -2,7 +2,7 @@ import fs from 'fs';
 
 export default class Data {
 
-    shows = []
+    shows = {}
     tickets = { 'add': {}, 'adj': {}, 'req': [], 'bug': [] }
 
     // STANDARD CATEGORIES
@@ -19,15 +19,15 @@ export default class Data {
             return false;
         }
 
-        for (let i = 0; i < this.shows.length; i++) {
-            const element = this.shows[i];
-            console.log(data);
-            console.log(element);
-            if (data.name.toLowerCase() == element.name.toLowerCase()) {
-                console.log("already created");
-                return false;
-            }
-        }
+        // for (let i = 0; i < this.shows.length; i++) {
+        //     const element = this.shows[i];
+        //     console.log(data);
+        //     console.log(element);
+        //     if (data.name.toLowerCase() == element.name.toLowerCase()) {
+        //         console.log("already created");
+        //         return false;
+        //     }
+        // }
 
         var show = {}
         var articles = ["and ", "the ", "of ", "in ", "as ", "an ", "a "]
@@ -73,20 +73,48 @@ export default class Data {
         return true;
     }
 
+    approveShow(data) {
+
+        for (let i = 0; i < this.shows.length; i++) {
+            const element = this.shows[i];
+            console.log(data);
+            console.log(element);
+            if (data.name.toLowerCase() == element.name.toLowerCase()) {
+                console.log("already created");
+                return false;
+            }
+        }
+
+        this.shows[data.name] = {
+            img: data.img,
+            data: data.data
+        }
+
+        this.saveShows();
+        delete this.tickets.add[data.ticket]
+        this.saveTickets();
+        return true;
+    }
+
     getShowNames(str = "") {
         str = str.toLowerCase();
         var temp = [];
-        console.log(this.shows)
-        for (let i = 0; i < this.shows.length; i++) {
-            const element = this.shows[i];
+        console.log(this.shows);
+        const showNames = Object.keys(this.shows);
+        for (let i = 0; i < showNames.length; i++) {
+            const element = showNames[i];
 
-            var title = element.name.toLowerCase();
+            var title = element.toLowerCase();
             if (str.length == 0 || title.indexOf(str) != -1) {
                 temp.push(element);
             }
         }
+
+        if (temp.length == 0) {
+            return JSON.stringify([],null)
+        }
         // console.log(temp);
-        return JSON.stringify(temp);
+        return JSON.stringify([temp,this.shows[temp[0]].img]);
     }
 
     getShowRequests() {

@@ -111,6 +111,20 @@ app.post('/createShowRequest', function (req, res) {
     }
 });
 
+app.post('/approveShow', function (req, res) {
+    if (!uuids[req.headers.authorization]) {
+        res.sendStatus(401)
+        return;
+    } 
+
+    let save = data.approveShow(req.body);
+    if (save) {
+        res.sendStatus(200);
+    } else {
+        res.sendStatus(409);
+    }
+});
+
 app.use(express.static('dist', options))
 
 // var httpsServer = https.createServer(credentials, app);

@@ -44,22 +44,23 @@ export default function CreateTicket(props) {
     const [isWarning, setWarning] = useState(false);
     const input = useRef(null);
 
-    function changeList(lists) {
+    function changeList(data) {
+        data = JSON.parse(data);
 
         if (input.current.value.length == 0) {
             return;
         }
 
         var isDuplicate = false;
-        lists = JSON.parse(lists);
+        var lists = data[0];
         lists.forEach(element => {
             var option = document.createElement("option")
             option.value = element.name;
 
-            if (input.current.value.toLowerCase() == element.name.toLowerCase()) {
+            if (input.current.value.toLowerCase() == element.toLowerCase()) {
                 isDuplicate = true;
             }
-            console.log(element.name);
+            console.log(element);
         });
         if (isDuplicate) {
             // submitBtn.current.disabled = true;

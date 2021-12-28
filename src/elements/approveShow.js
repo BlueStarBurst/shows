@@ -1,24 +1,40 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, Form, FormControl, InputGroup, Modal, Col, Image } from "react-bootstrap";
+import { httpPostAsync } from "../assets/serverHandler";
 
 export default function ApproveShow(props) {
 
     const [src, setSrc] = useState(null);
+    const [data, setData] = useState(null);
+
+    const categories = ["Action", "Comedy", "Romance", "Sci-Fi"]
 
     const widthStyles = {
-        width: "max-content"
+        width: "max-content",
+        height: "max-content",
+        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+        flexWrap: "wrap"
+    }
+
+    const flexStyles = {
+        display: "flex",
+        width: "100%",
+        flexDirection: "column",
+        marginRight: "1rem",
+        maxWidth: "90%",
+        // minWidth: "10vw"
     }
 
     const picStyle = {
-        width: "max-content",
+        width: "100%",
         border: "gray 1px dashed",
         marginRight: "1rem",
         backgroundColor: "rgba(128, 128, 128, 0.2)",
-        textAlign: "center",
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        position: "relative"
+        display: "block",
+        position: "relative",
+        flexGrow: "4"
     }
 
     const nex = {
@@ -50,9 +66,11 @@ export default function ApproveShow(props) {
         zIndex: "100"
     }
 
+
+
     function onImageChange(e) {
         console.log(e)
-        setSrc(URL.createObjectURL(e.target.files[0]))
+        setSrc(e.target.value)
     }
 
     function closeModal() {
@@ -60,49 +78,82 @@ export default function ApproveShow(props) {
         props.close();
     }
 
+    useEffect(() => {
+        if (props.selected) {
+            console.log(props.selected.data)
+            var datas = categories.map(e => 0)
+
+            var propData = props.selected.data
+            propData.forEach(element => {
+                element.forEach((e, i) => {
+                    datas[i] = datas[i] + e;
+                });
+            });
+
+            var dataSet = []
+
+            datas.forEach((e, i) => {
+                datas[i] = datas[i] / propData.length;
+                console.log("selectedShow" + categories[i])
+                dataSet.push(
+                    <Form.Group className="mb-3 minCon" style={{ width: "min-content !important", marginRight: "1rem", display: "flex", flexDirection: "row" }}>
+                        <InputGroup>
+                            <InputGroup.Text className="textNum" style={{ borderRadius: "0.25rem 0.25rem 0 0" }}>{categories[i]}</InputGroup.Text>
+                            <FormControl id={"selectedShow" + categories[i]} required className="textNum2" style={{ borderRadius: "0 0 0.25rem 0.25rem" }} defaultValue={datas[i]} />
+                        </InputGroup>
+                    </Form.Group>)
+            });
+
+            setData(dataSet);
+
+        }
+
+    }, [props.selected])
+
+    function submitShow(e) {
+        e.preventDefault();
+        const name = document.getElementById('selectedShowName').value;
+        const img = document.getElementById('selectedShowImg').value;
+        const data = categories.map(e => {
+            console.log("selectedShow" + e)
+            return document.getElementById("selectedShow" + e).value;
+        })
+        console.log(data);
+        httpPostAsync('/approveShow', 'name=' + name + "&data=" + data + "&img=" + img + "&ticket=" + props.selected.name);
+        closeModal();
+    }
+
     return (
-        <Modal show={props.show} centered onHide={closeModal} size="lg">
-            <Form>
-                <Modal.Header style={{textAlign: "center", paddingLeft: "3rem"}} closeButton>
-                    {(props.selected) ? <p className="m-0 w-100">Approve <i>{props.selected.name}</i>?</p> : "Approve Show?"}
+        <Modal show={props.show} centered onHide={closeModal}>
+            <Form onSubmit={submitShow}>
+                <Modal.Header style={{ textAlign: "center", paddingLeft: "3rem" }} closeButton>
+                    {(props.selected) ? <p className="m-0 w-100">Approve Show</p> : "Approve Show?"}
                 </Modal.Header>
-                <Modal.Body style={{ display: "flex" }}>
-                    {(src) ? <div style={nex}>
-                        <input onChange={onImageChange} accept="image/*" style={input} type="file" id="logo" />
-                        <Image style={img} src={src} />
-                    </div> :
-                        <Col style={picStyle}>
-                            <input onChange={onImageChange} accept="image/*" style={input} type="file" id="logo" />
-                            <p>Insert Photo Here!</p>
-                        </Col>}
+                <Modal.Body style={{ borderBottom: "rgb(230, 230, 230) 1px solid" }}>
+                    <Form.Group >
+                        <InputGroup>
+                            <InputGroup.Text>Name</InputGroup.Text>
+                            <FormControl id="selectedShowName" required defaultValue={(props.selected) ? props.selected.name : "title"} />
+                        </InputGroup>
+                    </Form.Group>
+                </Modal.Body>
+                <Modal.Body style={{ display: "flex", width: "max-contents" }}>
+                    <div style={flexStyles}>
+
+                        <Form.Group className="mb-3" style={{ height: "max-content", width: "100%" }}>
+                            <InputGroup style={{ width: "100% !important" }}>
+                                <InputGroup.Text>URL</InputGroup.Text>
+                                <FormControl id="selectedShowImg" required onChange={onImageChange} autoComplete="off" />
+                            </InputGroup>
+                        </Form.Group>
+
+                        {(src) ? <Image style={img} src={src} /> : <div style={picStyle}>
+                        </div>}
+
+
+                    </div>
                     <Col style={widthStyles}>
-                        <Form.Group className="mb-3">
-                            <InputGroup>
-                                <InputGroup.Text>Action</InputGroup.Text>
-                                <FormControl/>
-                            </InputGroup>
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
-                            <InputGroup>
-                                <InputGroup.Text>Comedy</InputGroup.Text>
-                                <FormControl/>
-                            </InputGroup>
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
-                            <InputGroup>
-                                <InputGroup.Text>Romance</InputGroup.Text>
-                                <FormControl/>
-                            </InputGroup>
-                        </Form.Group>
-
-                        <Form.Group className="mb-0">
-                            <InputGroup>
-                                <InputGroup.Text>Sci-Fi</InputGroup.Text>
-                                <FormControl/>
-                            </InputGroup>
-                        </Form.Group>
+                        {data}
                     </Col>
 
                 </Modal.Body>

@@ -8,8 +8,9 @@ import './assets/styles.css'
 import SearchShows from './elements/searchShows';
 
 import { httpPostAsync } from './assets/serverHandler';
-import { Badge, Container, Row } from "react-bootstrap";
+import { Badge, Container, Image, Row } from "react-bootstrap";
 import ApproveShow from './elements/approveShow';
+import ImagePreview from './elements/imagePreview';
 
 function unAuth(data) {
     localStorage.setItem("session", "expired");
@@ -20,7 +21,7 @@ function unAuth(data) {
     setTimeout(() => {
         window.location.href = window.location.origin + "/"
     }, 2000)
-    
+
 }
 
 function onAuth(data) {
@@ -55,6 +56,7 @@ export default function Admin(props) {
     }
 
     const [requests, setReq] = useState(null);
+    const [selectedImageSrc, setSelectedImageSrc] = useState(null);
     const [selectedReqShow, setSelectedReqShow] = useState(null);
     const [reqShowModal, setReqShowModal] = useState(null);
 
@@ -122,7 +124,7 @@ export default function Admin(props) {
 
         // setReqShows(arr);
         setReq(arr.map(e =>
-            <div style={elem} className='reqShow' onClick={() => {setSelectedReqShow(e); setReqShowModal(true)}}>
+            <div style={elem} className='reqShow' onClick={() => { setSelectedReqShow(e); setReqShowModal(true) }}>
                 <Badge pill bg="secondary" style={{ marginRight: "2%" }}>{e.count}</Badge>
                 <p className='m-0'>{e.name}</p>
             </div>
@@ -131,9 +133,15 @@ export default function Admin(props) {
 
     useEffect(() => {
         httpPostAsync('/ticketShowRequests', '', onShowRequests, console.log, unAuth);
-    }, [])
+    }, [reqShowModal])
 
 
+    const imgStyle = {
+        height: "auto",
+        width: "85%",
+        paddingLeft: "20%",
+        paddingRight: "0%"
+    }
 
     return (
 
@@ -141,10 +149,10 @@ export default function Admin(props) {
 
             <Row style={styleRow}>
                 <div style={item}>
-
+                    <ImagePreview src={selectedImageSrc} />
                 </div>
                 <div style={midItem} className='midItem'>
-                    <SearchShows />
+                    <SearchShows setSrc={setSelectedImageSrc} />
                 </div>
                 <div style={item} className="reqShowItemIn">
                     <div style={reqShows}>
@@ -156,7 +164,7 @@ export default function Admin(props) {
                 </div>
 
             </Row>
-            <ApproveShow show={reqShowModal} selected={selectedReqShow} close={() => {setReqShowModal(false)}} />
+            <ApproveShow show={reqShowModal} selected={selectedReqShow} close={() => { setReqShowModal(false) }} />
         </div>
     )
 }

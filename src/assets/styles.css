@@ -12,6 +12,7 @@ html {
   transform: translateY(-100%);
   opacity: 0;
   transition: all 2s;
+  pointer-events: none;
 }
 
 a {
@@ -152,4 +153,34 @@ a {
     opacity: 0;
     transform: translateY(-25%);
   }
+}
+
+.textNum {
+  width: 96px !important;
+  text-align: center;
+  /* display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center; */
+}
+
+.textNum2 {
+  width: 96px !important;
+  margin-left: 0px !important;
+}
+
+.minCon {
+  width: min-content !important;
+}
+
+.imgPrevIn {
+  opacity: 1;
+  transition: all 1s;
+
+}
+
+.imgPrevOut {
+  transition: all 1s;
+  transform: translateX(5%);
+  opacity: 0;
 }
