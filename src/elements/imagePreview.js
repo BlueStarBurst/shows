@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react"
 import { Image } from "react-bootstrap"
 
+var timeout = null;
+
 export default function ImagePreview(props) {
 
     const ref = useRef(null)
@@ -14,14 +16,15 @@ export default function ImagePreview(props) {
     }
 
     useEffect(() => {
+        clearTimeout(timeout);
         ref.current.className = "imgPrevOut"
-        setTimeout(() => {
+        timeout = setTimeout(() => {
             ref.current.className = "imgPrevIn"
             setSrc(props.src)
         }, 1000)
     }, [props.src])
 
     return (
-        <Image ref={ref} style={imgStyle} src={src} />
+        <Image id="imgPrev" ref={ref} style={imgStyle} src={src} />
     )
 }

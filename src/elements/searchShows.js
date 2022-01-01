@@ -41,6 +41,7 @@ export default function SearchShows(props) {
         var lists = data[0];
 
         if (!lists) {
+            ticket.current.className = "show";
             props.setSrc(null);
             setFindable(false);
             return;

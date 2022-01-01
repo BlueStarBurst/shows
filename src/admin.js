@@ -15,6 +15,7 @@ import ImagePreview from './elements/imagePreview';
 function unAuth(data) {
     localStorage.setItem("session", "expired");
     console.log(data);
+    document.getElementById("imgPrev").className = "imgPrevOut"
     document.getElementsByClassName("midItem")[0].className = "midItemOut"
     document.getElementsByClassName("reqShowItemIn")[0].className = "reqShowItemOut"
 

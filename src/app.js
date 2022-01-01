@@ -124,6 +124,7 @@ function App() {
         localStorage.setItem("session", data)
         console.log(data)
         document.getElementsByClassName("midItem")[0].className = "midItemOut"
+        document.getElementById("imgPrev").className = "imgPrevOut"
 
         setTimeout(() => {
             window.location.href = window.location.origin + "/admin"
@@ -167,7 +168,8 @@ function App() {
     }
 
     const item = {
-        width: "max-content"
+        flexGrow: "1",
+        width: "33%"
     }
 
     return (

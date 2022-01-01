@@ -99,7 +99,7 @@ export default function ApproveShow(props) {
                     <Form.Group className="mb-3 minCon" style={{ width: "min-content !important", marginRight: "1rem", display: "flex", flexDirection: "row" }}>
                         <InputGroup>
                             <InputGroup.Text className="textNum" style={{ borderRadius: "0.25rem 0.25rem 0 0" }}>{categories[i]}</InputGroup.Text>
-                            <FormControl id={"selectedShow" + categories[i]} required className="textNum2" style={{ borderRadius: "0 0 0.25rem 0.25rem" }} defaultValue={datas[i]} />
+                            <FormControl id={"selectedShow" + categories[i]} required className="textNum2" style={{ borderRadius: "0 0 0.25rem 0.25rem" }} defaultValue={datas[i] || ''} />
                         </InputGroup>
                     </Form.Group>)
             });

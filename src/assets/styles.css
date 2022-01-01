@@ -181,6 +181,6 @@ a {
 
 .imgPrevOut {
   transition: all 1s;
-  transform: translateX(5%);
+  transform: translateX(-5%);
   opacity: 0;
 }
